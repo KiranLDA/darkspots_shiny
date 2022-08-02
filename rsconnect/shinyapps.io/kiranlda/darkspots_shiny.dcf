@@ -1,0 +1,11 @@
+name: darkspots_shiny
+title:
+username:
+account: kiranlda
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6728820
+bundleId: 6158014
+url: https://kiranlda.shinyapps.io/darkspots_shiny/
+when: 1659451469.45081
+lastSyncTime: 1659451469.45081
