@@ -9,7 +9,7 @@ library(RColorBrewer)
 normalise <- function(x){(x-min(x,na.rm=T))/(max(x,na.rm=T)-min(x,na.rm=T))}
 
 
-
+# rsconnect::deployApp('C:/Users/kdh10kg/Documents/github/darkspots_shiny/darkspots_shiny')
 load("app_data.RData")
 # simplifiedBoundaries <- tdwg3#boundaries # rmapshaper::ms_simplify(boundaries)
 
@@ -43,8 +43,13 @@ ui <- fluidPage(
                   c("Ignore" = "Ignore",
                     "Describe species in less known areas" = "Avoid",
                     "Continue with past description strategy" = "Target"),
-
                   selected = "Target"),
+
+      selectInput(inputId = "Travel",
+                  label = "Proportion of area >6h travel from town",
+                  c("Ignore" = "Ignore",
+                    "Collect in areas that can be accessed easily" = "Avoid",
+                    "Collect in remote areas" = "Target")),
 
 
       selectInput(inputId = "Research",
@@ -113,13 +118,24 @@ server <- function(input, output, session) {
       table["toplot"] =  table["toplot"]* (var)
     }
 
+    # Travel
+    if(input$Travel == "Avoid"){
+      var = normalise(table$`Perc_6hrs`)
+      table["toplot"] =  table["toplot"]* (1-var)
+    }
+    if(input$Travel == "Target"){
+      var = normalise(table$`Perc_6hrs`)
+      table["toplot"] =  table["toplot"]* (var)
+    }
+
+
     # Research
     if(input$Research == "Avoid"){
-      var = normalise(table$`v2cafres`)
+      var = normalise(table$`num_instit`) # v2cafres
       table["toplot"] =  table["toplot"]* (1-var)
     }
     if(input$Research == "Target"){
-      var = normalise(table$`v2cafres`)
+      var = normalise(table$`num_instit`)
       table["toplot"] =  table["toplot"]* (var)
     }
 
